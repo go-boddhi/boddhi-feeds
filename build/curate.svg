@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Dark Squircle Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#242432" />
+      <stop offset="100%" stop-color="#111116" />
+    </linearGradient>
+
+    <!-- Glass Rim Highlight -->
+    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03" />
+    </linearGradient>
+
+    <!-- Vivid Curate Gradient (Electric Indigo to Coral Red) -->
+    <linearGradient id="curateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#f43f5e" />
+    </linearGradient>
+
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.4" />
+    </linearGradient>
+
+    <!-- Soft Glow Filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#ec4899" flood-opacity="0.38" />
+    </filter>
+  </defs>
+
+  <!-- Base Dark Squircle Body -->
+  <rect x="32" y="32" width="448" height="448" rx="100" fill="url(#bgGrad)" stroke="url(#rimGrad)" stroke-width="3" />
+
+  <!-- Inner Subtle Border Highlight -->
+  <rect x="35" y="35" width="442" height="442" rx="97" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1.5" />
+
+  <!-- Stylized 'C' Ring Emblem + Play Triangle + RSS Dot -->
+  <g filter="url(#glow)">
+    <!-- Curate C Arc Ring -->
+    <path d="M 330 160 A 130 130 0 1 0 330 352" fill="none" stroke="url(#curateGrad)" stroke-width="26" stroke-linecap="round" />
+    
+    <!-- Central Play Triangle Inside C -->
+    <path d="M 215 190 C 215 183 223 178 229 182 L 310 232 C 316 236 316 244 310 248 L 229 298 C 223 302 215 297 215 290 Z" fill="url(#curateGrad)" />
+  </g>
+
+  <!-- RSS Signal Waves (Top Right) -->
+  <path d="M 355 185 A 65 65 0 0 1 405 235" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round" opacity="0.85" />
+  <circle cx="355" cy="235" r="7" fill="#ffffff" opacity="0.9" />
+</svg>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #141210;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Vayu — YouTube RSS Sanctuary</title>
+  
+  <!-- PWA & Mobile Meta Tags -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#141210" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Outfit:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.344.0/font/lucide.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="dark-theme" style="background-color: #141210; color: #f5e6cf;">
+  <div id="app" class="app-container">
+    
+    <!-- SINGLE UNIVERSAL TOP HEADERBAR -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <button class="icon-btn" id="open-sidebar-btn" title="Toggle Sidebar">
+          <i class="icon-menu"></i>
+        </button>
+        <div style="display:flex; align-items:center; gap:8px;" class="top-bar-brand-group">
+          <span class="top-bar-brand">Vayu</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="back-to-feeds-btn" style="display: none; align-items: center; gap: 6px; border-radius: var(--radius-pill); font-size: 0.82rem; padding: 6px 14px; cursor: pointer;">
+          <i class="icon-arrow-left"></i> Back to Feeds
+        </button>
+      </div>
+
+      <div class="top-bar-center">
+        <div class="search-box">
+          <i class="icon-search"></i>
+          <input type="text" id="search-input" placeholder="Search videos, feeds..." />
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Reader Options Three-Dots Dropdown in Main Window Header -->
+        <div class="dropdown" id="top-reader-options-dropdown" style="display: none; position: relative; margin-right: 8px;">
+          <button class="icon-btn" id="top-reader-options-btn" title="Reading options" style="width:34px; height:34px; font-size:1.2rem; font-weight:700; cursor:pointer;">⋮</button>
+          <div id="top-reader-options-menu" class="dropdown-menu" style="display:none; position:absolute; right:0; top:calc(100% + 8px); background:var(--bg-card); border:1px solid var(--border-color); border-radius:10px; padding:6px; min-width:210px; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+            <div style="padding: 6px 12px 4px 12px; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Font Size</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 8px 8px 8px; gap: 8px;">
+              <button class="btn btn-secondary btn-sm font-decrease-btn" title="Decrease Font Size" style="flex: 1; padding: 6px 10px; display:flex; align-items:center; justify-content:center; gap:4px; font-size: 0.85rem; font-weight: 700; border-radius:7px;">
+                <i class="icon-minus" style="font-size:0.75rem;"></i> A-
+              </button>
+              <span class="font-size-label" style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); min-width: 44px; text-align: center;">100%</span>
+              <button class="btn btn-secondary btn-sm font-increase-btn" title="Increase Font Size" style="flex: 1; padding: 6px 10px; display:flex; align-items:center; justify-content:center; gap:4px; font-size: 0.85rem; font-weight: 700; border-radius:7px;">
+                <i class="icon-plus" style="font-size:0.75rem;"></i> A+
+              </button>
+            </div>
+            <div style="height: 1px; background: var(--border-color); margin: 4px 0 6px 0;"></div>
+            <div style="padding: 6px 12px 4px 12px; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Reading Layout</div>
+            <button class="btn btn-ghost btn-sm width-btn" data-width="compact" style="width:100%; justify-content:flex-start; gap:8px; padding:6px 12px; border-radius:7px; font-size:0.84rem;">
+              Compact (720px)
+            </button>
+            <button class="btn btn-ghost btn-sm width-btn" data-width="balanced" style="width:100%; justify-content:flex-start; gap:8px; padding:6px 12px; border-radius:7px; font-size:0.84rem;">
+              Balanced (1020px)
+            </button>
+            <button class="btn btn-ghost btn-sm width-btn" data-width="full" style="width:100%; justify-content:flex-start; gap:8px; padding:6px 12px; border-radius:7px; font-size:0.84rem;">
+              Full Width (100%)
+            </button>
+            <div style="height: 1px; background: var(--border-color); margin: 6px 0;"></div>
+            <button class="btn btn-ghost btn-sm listen-article-btn" style="width:100%; justify-content:flex-start; gap:8px; padding:6px 12px; border-radius:7px; font-size:0.84rem;">
+              <i class="icon-volume-2"></i> Listen to Article
+            </button>
+          </div>
+        </div>
+
+        <div class="window-controls">
+          <button class="window-control-btn" id="win-min-btn" title="Minimize">
+            <i class="icon-minus"></i>
+          </button>
+          <button class="window-control-btn" id="win-max-btn" title="Maximize">
+            <i class="icon-square"></i>
+          </button>
+          <button class="window-control-btn win-close" id="win-close-btn" title="Close">
+            <i class="icon-x"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <!-- MOBILE SIDEBAR BACKDROP OVERLAY -->
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <!-- LEFT SIDEBAR: Navigation & Feed Subscriptions -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+          <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-view="queue">
+              <i class="icon-list nav-item-icon"></i>
+              <span class="nav-item-title">My Queue</span>
+            </a>
+            <a href="#" class="nav-item" data-view="today" data-filter-type="today" data-category="All">
+              <i class="icon-clock nav-item-icon"></i>
+              <span class="nav-item-title">Today's Feed</span>
+            </a>
+            <a href="#" class="nav-item" data-view="bookmarks" id="nav-bookmarks">
+              <i class="icon-bookmark nav-item-icon"></i>
+              <span class="nav-item-title">Bookmarks</span>
+            </a>
+            <a href="#" class="nav-item" data-view="downloads" id="nav-downloads">
+              <i class="icon-download nav-item-icon"></i>
+              <span class="nav-item-title">Downloads</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="sidebar-section flex-grow">
+          <div class="section-header">
+            <span class="section-label">Categories & Channels</span>
+          </div>
+          <div class="category-list" id="category-list">
+            <!-- Dynamically populated categories with dot indicators -->
+          </div>
+        </div>
+
+        <div class="sidebar-section" style="padding-top:10px; padding-bottom:10px;">
+          <button class="btn btn-primary btn-block" id="add-url-open-btn" style="margin-bottom:8px; border-radius:var(--radius-sm); justify-content:flex-start; padding-left:14px;">
+            <i class="icon-plus"></i> Add Any URL to Queue
+          </button>
+          <button class="btn btn-secondary btn-block" id="add-feed-open-btn" style="border-radius:var(--radius-sm); justify-content:flex-start; padding-left:14px;">
+            <i class="icon-rss"></i> Add Feed / Channel
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <button class="icon-btn" id="refresh-all-btn" title="Refresh All Feeds">
+            <i class="icon-refresh-cw"></i>
+          </button>
+          <button class="icon-btn" id="settings-open-btn" title="Mobile PWA / Settings & Rules">
+            <i class="icon-settings"></i>
+          </button>
+        </div>
+      </aside>
+
+      <!-- MIDDLE COLUMN: Feed Items List & Downloads View -->
+      <main class="feed-main">
+        <div class="feed-container" id="feed-container">
+          <!-- Feed Card Items Rendered Here -->
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Fetching your digital garden feeds...</p>
+          </div>
+        </div>
+
+        <div class="downloads-container" id="downloads-container" style="display: none;">
+          <div class="downloads-header-bar">
+            <div class="downloads-header-title-group">
+              <h2 class="downloads-title">Video Downloads</h2>
+              <p class="downloads-subtitle">Downloaded offline videos saved in ~/Videos/vayu_downloads</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="open-downloads-folder-btn" style="display: flex; align-items: center; gap: 6px; border-radius: var(--radius-pill); font-size: 0.82rem; padding: 6px 14px; cursor: pointer;">
+              <i class="icon-folder"></i> Open Folder
+            </button>
+          </div>
+          <div id="downloads-list" class="downloads-list-grid">
+            <!-- Download Items Rendered Here -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- RIGHT/OVERLAY DRAWER: Article Reader & Digital Garden Notes -->
+    <div class="reader-backdrop" id="reader-backdrop"></div>
+    <section class="reader-drawer" id="reader-drawer">
+      <div id="reading-progress-bar" class="reading-progress-bar"></div>
+      <div class="drawer-header">
+        <!-- Left: Back button -->
+        <button class="btn btn-ghost btn-sm" id="close-reader-btn" onclick="window.appCloseReader && window.appCloseReader()" style="display:flex; align-items:center; gap:6px; font-weight:600; cursor:pointer; z-index:101;">
+          <i class="icon-arrow-left"></i> Back
+        </button>
+
+        <!-- Right: three-dot menu -->
+        <div style="display:flex; align-items:center; gap:10px;">
+          <!-- Three-dot dropdown -->
+          <div class="dropdown" id="reader-options-dropdown" style="position:relative;">
+            <button class="icon-btn" id="reader-options-btn" title="More options" onclick="document.getElementById('reader-options-menu').classList.toggle('open')" style="width:34px; height:34px; font-size:1.2rem; font-weight:700; letter-spacing:1px;">⋮</button>
+            <div id="reader-options-menu" class="dropdown-menu">
+              <div class="dropdown-section-title">Font Size</div>
+              <div class="font-size-row" style="display:flex; align-items:center; justify-content:space-between; padding:4px 8px 8px 8px; gap:8px;">
+                <button class="btn btn-sm font-control-btn font-decrease-btn" title="Decrease font size" style="flex:1; border-radius:6px; font-weight:700;">- A-</button>
+                <span class="font-size-label" style="font-size:0.82rem; font-weight:700; min-width:40px; text-align:center;">100%</span>
+                <button class="btn btn-sm font-control-btn font-increase-btn" title="Increase font size" style="flex:1; border-radius:6px; font-weight:700;">+ A+</button>
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-section-title">Reading Layout</div>
+              <button class="btn btn-ghost btn-sm width-btn" data-width="compact">
+                Compact (720px)
+              </button>
+              <button class="btn btn-ghost btn-sm width-btn" data-width="balanced">
+                Balanced (1020px)
+              </button>
+              <button class="btn btn-ghost btn-sm width-btn" data-width="full">
+                Full Width (100%)
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="btn btn-ghost btn-sm option-item-btn play-mpv-btn" id="play-in-mpv-btn" style="display:none;">
+                <i class="icon-tv"></i> Play in External Player (MPV/VLC)
+              </button>
+              <button class="btn btn-ghost btn-sm option-item-btn listen-article-btn">
+                <i class="icon-volume-2"></i> Listen to Article
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reader-scroll-content" id="reader-scroll-content">
+        <article class="article-view" id="article-view">
+          <div class="article-meta">
+            <span id="reader-feed-title">Channel Title</span>
+            <span class="meta-dot">•</span>
+            <span id="reader-date">Aug 20, 2026</span>
+            <span class="meta-dot" id="reader-time-dot">•</span>
+            <span id="reader-reading-time">3 min read</span>
+          </div>
+
+          <h1 id="reader-title" class="article-title">Article Title</h1>
+          <div id="reader-author" class="article-author">By Author</div>
+
+          <div id="reader-media-container" class="media-container"></div>
+
+          <div id="reader-content" class="article-body">
+            <!-- Sanitized HTML Content -->
+          </div>
+        </article>
+
+        <!-- LIVE WEBVIEW IFRAME -->
+        <div id="reader-webview-container" class="webview-container hidden">
+          <iframe id="reader-webview-iframe" src="about:blank"></iframe>
+        </div>
+
+        <!-- FLOATING AUDIO PLAYER BAR -->
+        <div id="audio-reader-bar" class="audio-reader-bar" style="display: none;">
+          <div class="audio-controls-left">
+            <button class="icon-btn" id="audio-play-pause-btn" title="Play / Pause">
+              <i class="icon-pause" id="audio-play-pause-icon"></i>
+            </button>
+            <span id="audio-progress-text" class="audio-progress-text">Reading...</span>
+          </div>
+          <div class="audio-controls-right">
+            <select id="audio-voice-select" class="audio-speed-select" title="Select Voice">
+              <option value="en_US-amy-medium">Amy (Neural)</option>
+              <option value="en_US-mike-medium">Mike (Neural)</option>
+              <option value="en_US-hfc_female-medium">HFC Female</option>
+              <option value="en_US-hfc_male-medium">HFC Male</option>
+            </select>
+            <select id="audio-speed-select" class="audio-speed-select" title="Reading Speed">
+              <option value="0.8">0.8x</option>
+              <option value="1.0" selected>1.0x</option>
+              <option value="1.25">1.25x</option>
+              <option value="1.5">1.5x</option>
+              <option value="2.0">2.0x</option>
+            </select>
+            <button class="icon-btn" id="audio-close-btn" title="Close Audio Player">
+              <i class="icon-x"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MODAL: ADD URL TO QUEUE -->
+    <div class="modal-backdrop" id="add-url-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add Any Link to Queue</h3>
+          <button class="icon-btn" id="add-url-close-btn"><i class="icon-x"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <label>Video or Article URL</label>
+            <input type="text" id="custom-url-input" placeholder="e.g. https://www.youtube.com/watch?v=... or blog post link" />
+            <span class="helper-text">Paste any URL — YouTube videos, blog posts, essays, or articles from any time!</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="add-url-cancel-btn">Cancel</button>
+          <button class="btn btn-primary" id="add-url-submit-btn">
+            <i class="icon-plus"></i> Add to Queue
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: ADD FEED -->
+    <div class="modal-backdrop" id="add-feed-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add New Feed or Resource</h3>
+          <button class="icon-btn" class="modal-close" id="add-feed-close-btn"><i class="icon-x"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <label>Resource URL, Handle, or Repo</label>
+            <input type="text" id="feed-url-input" placeholder="e.g. @veritasium, name.substack.com, golang/go, or blog URL" />
+            <span class="helper-text">Works automatically for YouTube, Substack, GitHub Releases, and Blogs!</span>
+          </div>
+          <div class="input-group">
+            <label>Category (Optional)</label>
+            <input type="text" id="feed-category-input" placeholder="e.g. Science, Tech, AI, Personal" />
+          </div>
+          <div class="input-group">
+            <label>Content Scrape Scope</label>
+            <select id="feed-scope-input">
+              <option value="latest" selected>Scrape Latest Content (Today's & Yesterday's videos/posts)</option>
+              <option value="all">Scrape All Content (Import all available videos/posts)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="add-feed-cancel-btn">Cancel</button>
+          <button class="btn btn-primary" id="add-feed-submit-btn">
+            <i class="icon-plus"></i> Add Feed
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: SETTINGS & MOBILE PWA QR CODE -->
+    <div class="modal-backdrop" id="settings-modal">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h3>Settings & Cross-Device PWA Sync</h3>
+          <button class="icon-btn" id="settings-close-btn"><i class="icon-x"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="pwa-tab">Mobile PWA Sync</button>
+            <button class="tab-btn" data-tab="rules-tab">Noise Filter Rules</button>
+            <button class="tab-btn" data-tab="manage-tab">Manage Feeds</button>
+          </div>
+
+          <!-- TAB 1: PWA SYNC -->
+          <div class="tab-content active" id="pwa-tab">
+            <p>Access your Digital Garden RSS Middleman from any mobile phone or browser on your local network:</p>
+            <div class="qr-container">
+              <div id="qrcode-box" class="qr-box">
+                <div id="qr-target"></div>
+              </div>
+              <div class="pwa-info">
+                <h4>Local Server URLs:</h4>
+                <ul id="local-ip-list" class="url-list">
+                  <li>http://localhost:8080</li>
+                </ul>
+                <div class="tip-box">
+                  <i class="icon-smartphone"></i> Open this link on your iPhone or Android browser and select <strong>"Add to Home Screen"</strong> to install as a PWA!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: NOISE RULES -->
+          <div class="tab-content" id="rules-tab">
+            <p>Automatically mute clickbait or prioritize favorite subjects:</p>
+            <div class="rule-form">
+              <input type="text" id="rule-keyword-input" placeholder="Keyword (e.g. 'crypto', 'drama')" />
+              <select id="rule-action-input">
+                <option value="mute">Mute (Auto Mark Read)</option>
+                <option value="prioritize">Prioritize (+10 Score)</option>
+              </select>
+              <button class="btn btn-secondary" id="add-rule-btn">Add Rule</button>
+            </div>
+            <div class="rules-list" id="rules-list"></div>
+          </div>
+
+          <!-- TAB 3: MANAGE FEEDS -->
+          <div class="tab-content" id="manage-tab">
+            <div class="manage-feeds-list" id="manage-feeds-list"></div>
+          </div>
+        </div>
+      </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="mobile-nav">
+      <button class="mobile-nav-item active" data-filter-type="all" data-category="All">
+        <i class="icon-sparkles"></i><span>All</span>
+      </button>
+      <button class="mobile-nav-item" data-filter-type="unread" data-category="All">
+        <i class="icon-circle-dot"></i><span>Unread</span>
+      </button>
+      <button class="mobile-nav-item" data-view="today" data-filter-type="today" data-category="All">
+        <i class="icon-calendar"></i><span>Today</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- FULLSCREEN IMAGE LIGHTBOX MODAL -->
+  <div id="image-lightbox-modal" class="image-lightbox-backdrop">
+    <button class="lightbox-close-btn" id="lightbox-close-btn" title="Close (Esc)">
+      <i class="icon-x"></i>
+    </button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="Full view" />
+      <p id="lightbox-caption" class="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

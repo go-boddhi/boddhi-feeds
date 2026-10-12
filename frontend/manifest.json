@@ -1,0 +1,17 @@
+{
+  "short_name": "DigitalGarden",
+  "name": "Digital Garden Feeds",
+  "description": "Unified social media RSS middleman & distraction-free reader",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#0f172a",
+  "background_color": "#090d16",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/npm/lucide-static@0.344.0/icons/sprout.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

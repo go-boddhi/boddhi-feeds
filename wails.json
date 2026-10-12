@@ -1,0 +1,10 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "vayu",
+  "outputfilename": "vayu",
+  "frontend:dir": "frontend",
+  "author": {
+    "name": "Antigravity",
+    "email": "agent@antigravity"
+  }
+}
